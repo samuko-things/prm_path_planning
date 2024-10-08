@@ -78,24 +78,17 @@ def plan_and_smoothen_path(map_image_file, robot_radius_cm, map_resolution, curr
 
     print("waiting for path smoothening ...")
     optimized_path_x, optimized_path_y = func.smoothen_path(prm_path_x, prm_path_y, obstacle_map, min_x, min_y)
-    # optimized_path_x, optimized_path_y = func.smoothen_path(optimized_path_x, optimized_path_y, obstacle_map, min_x, min_y)
-    # optimized_path_x, optimized_path_y = func.smoothen_path(optimized_path_x, optimized_path_y, obstacle_map, min_x, min_y)
-    
 
     plt.plot(ox, oy, ".k")
-
     plt.plot(current_loc[x], current_loc[y], "ok")
     plt.plot(target_loc[x], target_loc[y], "ob")
-    
+    plt.plot(prm_path_x, prm_path_y, "-b")
+    plt.plot(optimized_path_x, optimized_path_y, "-r")
     plt.grid(True)
     plt.axis("equal")
 
-    plt.plot(prm_path_x, prm_path_y, "-b")
-    plt.plot(optimized_path_x, optimized_path_y, "-r")
-
     # plt.pause(0.01)
 
-    
     return optimized_path_x, optimized_path_y, prm_path_x, prm_path_y
 
 ###################################################################################

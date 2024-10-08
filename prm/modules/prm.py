@@ -46,7 +46,7 @@ class PRM:
       sample_x, sample_y = self.sample_points(sx, sy, gx, gy,
                                         rr, ox, oy, obstacle_kd_tree)
 
-      plt.plot(sample_x, sample_y, ".g")
+      plt.plot(sample_x, sample_y, ".c")
 
       road_map = self.generate_road_map(sample_x, sample_y, rr, obstacle_kd_tree)
 
