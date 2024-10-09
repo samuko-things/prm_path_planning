@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import modules.ogmap as ogmap
 from modules import prm
 import modules.func as func
 import time
+import modules.cubic_spline_path as csp
+import modules.b_spline_path as b
 
 
 show_animation = True
@@ -11,8 +14,23 @@ prm = prm.PRM() # probabilistic road map class
 
 
 
-
 ###################################################################################
+def cubic_spline_course(x, y, ds=0.1):
+    sp = csp.Spline2D(x, y)
+    s = list(np.arange(0, sp.s[-1], ds))
+
+    rx, ry, ryaw, rk = [], [], [], []
+    for i_s in s:
+        ix, iy = sp.calc_position(i_s)
+        rx.append(ix)
+        ry.append(iy)
+        ryaw.append(sp.calc_yaw(i_s))
+        rk.append(sp.calc_curvature(i_s))
+
+    return rx, ry, ryaw, rk
+
+
+
 def actual_to_grid_pos(actual_pos, map_resolution):
     return round(actual_pos/map_resolution)
 
@@ -75,6 +93,7 @@ def plan_path(map_image_file, robot_radius_cm, map_resolution, current_loc, targ
     
     px, py = func.remove_redundant_path(rx,ry)
     prm_path_x, prm_path_y = func.reverse_list(px), func.reverse_list(py)
+    
 
     plt.plot(ox, oy, ".k")
 
@@ -85,10 +104,16 @@ def plan_path(map_image_file, robot_radius_cm, map_resolution, current_loc, targ
     plt.axis("equal")
 
     plt.plot(prm_path_x, prm_path_y, "-b")
+
+
+    Rx,Ry,ryaw,rk = cubic_spline_course(prm_path_x, prm_path_y)
+    plt.plot(Rx, Ry, "-r")
+
+
     plt.pause(0.01)
 
     
-    return prm_path_x, prm_path_y
+    return prm_path_x, prm_path_y, Rx, Ry
 
 ###################################################################################
 
@@ -110,15 +135,12 @@ if __name__ == '__main__':
     start_time = time.time()
 
     map_image_file = "maps/test/floor_map_reduced.png"
-    robot_radius_cm = 20 # in cm
+    robot_radius_cm = 15 # in cm
     map_resolution = 10 # cm per grid based on the map
 
     # start and goal grid position and not the actual pos in cm
-    # sx, sy = 42, 75
-    # gx, gy = 94, 13
-
-    sx, sy = 15, 15
-    gx, gy = 90, 15
+    sx, sy = 42, 75
+    gx, gy = 94, 13
 
     # # start and goal actual position in cm
     # sx, sy = 120, 3080
@@ -133,7 +155,7 @@ if __name__ == '__main__':
 
     # plans and gets the generated path
     
-    px, py = plan_path(map_image_file, robot_radius_cm, map_resolution, start, goal)
+    prm_path_x, prm_path_y, Rx, Ry = plan_path(map_image_file, robot_radius_cm, map_resolution, start, goal)
     
     stop_time = time.time()
 
@@ -142,9 +164,9 @@ if __name__ == '__main__':
 
 
 
-    path_coord, _, point_index = func.get_path_coord(px, py, map_resolution)
-    path_dist, path_total_dist, _, _ = func.get_total_path_dist(px, py, map_resolution) 
-    path_angles = func.get_path_angles(px, py)
+    path_coord, _, point_index = func.get_path_coord(Rx, Ry, map_resolution)
+    path_dist, path_total_dist, _, _ = func.get_total_path_dist(Rx, Ry, map_resolution) 
+    path_angles = func.get_path_angles(Rx, Ry)
 
     # print(len(path_coord))
     # print(len(path_dist))

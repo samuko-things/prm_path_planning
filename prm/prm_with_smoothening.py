@@ -6,7 +6,7 @@ import time
 
 
 show_animation = True
-prm = prm.PRM(N_SAMPLE=1000) # probabilistic road map class
+prm = prm.PRM() # probabilistic road map class
 
 
 
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     start_time = time.time()
 
     map_image_file = "maps/test/floor_map_reduced.png"
-    robot_radius_cm = 10 # in cm
+    robot_radius_cm = 20 # in cm
     map_resolution = 10 # cm per grid based on the map
 
     # start and goal grid position and not the actual pos in cm
@@ -167,7 +167,7 @@ if __name__ == '__main__':
     # print(len(opt_path_coord))
 
     # print("optimized distance :",opt_path_dist*map_resolution, "cm")
-    # print("total_dist :", opt_path_total_dist*map_resolution, "cm")
+    print("total_dist :", opt_path_total_dist*map_resolution, "cm")
     # print("optimized path_angles :", opt_path_angles)
 
 

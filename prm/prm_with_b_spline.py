@@ -15,6 +15,8 @@ prm = prm.PRM() # probabilistic road map class
 
 
 
+
+###################################################################################
 def b_spline_course(x, y, sampling_number=10):
     # way points
     way_point_x = x
@@ -27,21 +29,6 @@ def b_spline_course(x, y, sampling_number=10):
                                          n_course_point)
 
     return rax, ray, rix, riy
-
-###################################################################################
-def cubic_spline_course(x, y, ds=0.1):
-    sp = csp.Spline2D(x, y)
-    s = list(np.arange(0, sp.s[-1], ds))
-
-    rx, ry, ryaw, rk = [], [], [], []
-    for i_s in s:
-        ix, iy = sp.calc_position(i_s)
-        rx.append(ix)
-        ry.append(iy)
-        ryaw.append(sp.calc_yaw(i_s))
-        rk.append(sp.calc_curvature(i_s))
-
-    return rx, ry, ryaw, rk
 
 
 
@@ -120,21 +107,14 @@ def plan_path(map_image_file, robot_radius_cm, map_resolution, current_loc, targ
     plt.plot(prm_path_x, prm_path_y, "-b")
 
 
-    # Rx,Ry,ryaw,rk = cubic_spline_course(prm_path_x, prm_path_y)
-    # plt.plot(Rx, Ry, "-r")
-
-
     rax, ray, rix, riy = b_spline_course(prm_path_x, prm_path_y)
     plt.plot(rax, ray, '-r', label="Approximated B-Spline path")
-
-    # plt.plot(rix, riy, '-r', label="Interpolated B-Spline path")
 
 
     plt.pause(0.01)
 
     
-    # return prm_path_x, prm_path_y
-    return rax, ray
+    return prm_path_x, prm_path_y, rax, ray
 
 ###################################################################################
 
@@ -176,7 +156,7 @@ if __name__ == '__main__':
 
     # plans and gets the generated path
     
-    px, py = plan_path(map_image_file, robot_radius_cm, map_resolution, start, goal)
+    prm_path_x, prm_path_y, rax, ray = plan_path(map_image_file, robot_radius_cm, map_resolution, start, goal)
     
     stop_time = time.time()
 
@@ -185,9 +165,9 @@ if __name__ == '__main__':
 
 
 
-    path_coord, _, point_index = func.get_path_coord(px, py, map_resolution)
-    path_dist, path_total_dist, _, _ = func.get_total_path_dist(px, py, map_resolution) 
-    path_angles = func.get_path_angles(px, py)
+    path_coord, _, point_index = func.get_path_coord(rax, ray, map_resolution)
+    path_dist, path_total_dist, _, _ = func.get_total_path_dist(rax, ray, map_resolution) 
+    path_angles = func.get_path_angles(rax, ray)
 
     # print(len(path_coord))
     # print(len(path_dist))

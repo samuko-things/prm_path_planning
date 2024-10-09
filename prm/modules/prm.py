@@ -32,7 +32,7 @@ class Node:
                str(self.cost) + "," + str(self.parent_index)
 
 class PRM:
-  def __init__(self, show_animation=False, N_SAMPLE=1500, N_KNN=10, MAX_EDGE_LEN=30):
+  def __init__(self, show_animation=False, N_SAMPLE=1500, N_KNN=7, MAX_EDGE_LEN=5):
     self.show_animation = show_animation
     # parameter
     self.N_SAMPLE = N_SAMPLE  # number of sample_points
@@ -225,8 +225,8 @@ class PRM:
       sample_x, sample_y = [], []
 
       while len(sample_x) <= self.N_SAMPLE:
-          tx = (random.random() * (max_x - min_x)) + min_x
-          ty = (random.random() * (max_y - min_y)) + min_y
+          tx = round((random.random() * (max_x - min_x)) + min_x)
+          ty = round((random.random() * (max_y - min_y)) + min_y)
 
           dist, index = obstacle_kd_tree.query([tx, ty])
 
