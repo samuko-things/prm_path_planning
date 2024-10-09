@@ -103,14 +103,14 @@ def plan_path(map_image_file, robot_radius_cm, map_resolution, current_loc, targ
     plt.grid(True)
     plt.axis("equal")
 
-    plt.plot(prm_path_x, prm_path_y, "-b")
+    plt.plot(prm_path_x, prm_path_y, "-b", label='prm')
 
 
     Rx,Ry,ryaw,rk = cubic_spline_course(prm_path_x, prm_path_y)
-    plt.plot(Rx, Ry, "-r")
+    plt.plot(Rx, Ry, "-r", label='prm_with_cubic_spline')
 
-
-    plt.pause(0.01)
+    plt.legend()
+    # plt.pause(0.01)
 
     
     return prm_path_x, prm_path_y, Rx, Ry
@@ -139,8 +139,11 @@ if __name__ == '__main__':
     map_resolution = 10 # cm per grid based on the map
 
     # start and goal grid position and not the actual pos in cm
-    sx, sy = 42, 75
-    gx, gy = 94, 13
+    # sx, sy = 42, 75
+    # gx, gy = 94, 13
+
+    sx, sy = 15, 15
+    gx, gy = 90, 15
 
     # # start and goal actual position in cm
     # sx, sy = 120, 3080
@@ -175,7 +178,7 @@ if __name__ == '__main__':
     print("total_dist :", path_total_dist*map_resolution, "cm")
 
     
-    func.print_data(point_index, path_coord, path_dist, path_angles)
+    func.print_data(point_index, path_coord, path_dist, path_angles, file_name="prm_with_cubic_spline.csv")
     
     # show planned map
     plt.show()

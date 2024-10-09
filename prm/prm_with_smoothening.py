@@ -82,8 +82,9 @@ def plan_and_smoothen_path(map_image_file, robot_radius_cm, map_resolution, curr
     plt.plot(ox, oy, ".k")
     plt.plot(current_loc[x], current_loc[y], "ok")
     plt.plot(target_loc[x], target_loc[y], "ob")
-    plt.plot(prm_path_x, prm_path_y, "-b")
-    plt.plot(optimized_path_x, optimized_path_y, "-r")
+    plt.plot(prm_path_x, prm_path_y, "-b", label='prm')
+    plt.plot(optimized_path_x, optimized_path_y, "-r", label='prm_with_smoothening')
+    plt.legend()
     plt.grid(True)
     plt.axis("equal")
 
@@ -189,7 +190,7 @@ if __name__ == '__main__':
     # dist_diff = prm_path_dist-opt_path_dist
     # print("difference :",diff*map_resolution, "cm")
     
-    func.print_data(point_index, opt_path_coord, opt_path_dist, opt_path_angles)
+    func.print_data(point_index, opt_path_coord, opt_path_dist, opt_path_angles, file_name="prm_with_smoothening.csv")
     
     # show planned map
     plt.show()

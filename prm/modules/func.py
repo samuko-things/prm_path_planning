@@ -363,15 +363,15 @@ def get_path_angles(path_x, path_y):
     return path_angle
 
 
-def print_data(path_index, coord, distance, angle):
+def print_data(path_index, coord, distance, angle, file_name=None):
     df = pd.DataFrame({
         "POINTS":path_index,
         "COORDINATE":coord,
         "DISTANCE":distance,
         "ANGLE":angle })
     
-    filename = "my_data.csv"
-    df.to_csv(filename, index=False)
+    if file_name:
+      df.to_csv(file_name, index=False)
     print(df)
 
 ###################################################################################

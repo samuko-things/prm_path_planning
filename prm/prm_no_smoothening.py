@@ -84,8 +84,9 @@ def plan_path(map_image_file, robot_radius_cm, map_resolution, current_loc, targ
     plt.grid(True)
     plt.axis("equal")
 
-    plt.plot(prm_path_x, prm_path_y, "-b")
-    plt.pause(0.01)
+    plt.plot(prm_path_x, prm_path_y, "-b", label='prm')
+    plt.legend()
+    # plt.pause(0.01)
 
     
     return prm_path_x, prm_path_y
@@ -153,7 +154,7 @@ if __name__ == '__main__':
     print("total_dist :", path_total_dist*map_resolution, "cm")
 
     
-    func.print_data(point_index, path_coord, path_dist, path_angles)
+    func.print_data(point_index, path_coord, path_dist, path_angles, file_name="prm_no_smoothening.csv")
     
     # show planned map
     plt.show()
